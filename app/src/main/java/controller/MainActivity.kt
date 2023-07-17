@@ -1,19 +1,27 @@
 package controller
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Toast
 import com.example.codeswag.R
-import model.Category
+import controlAdapter.CategoryAdapter
 import services.DataService
 
 class MainActivity : AppCompatActivity() {
-    lateinit var adapter : ArrayAdapter<Category>
+    lateinit var adapter : CategoryAdapter
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        adapter = ArrayAdapter(this,
-        android.R.layout.simple_list_item_1,
-        DataService.categories)
+        adapter = CategoryAdapter(this,DataService.categories
+        )
+        val categorylistview: ListView = findViewById(R.id.categorieslistview)
+        categorylistview.adapter= adapter
+        categorylistview.setOnItemClickListener { adapterView, view, i, l ->
+            val category = DataService.categories[i]
+            Toast.makeText(this, "You clicked on the ${category.title} cell", Toast.LENGTH_SHORT).show()
+        }
     }
 }
